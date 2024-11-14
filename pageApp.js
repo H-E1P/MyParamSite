@@ -219,14 +219,87 @@ class MainInterface {
  *         
  *         const makePageApp = genDecoratorNamed_makePageApp(getConstaticState);
  *         
+ *         class DownloadibleObj {
+ *         
+ *             #aTag;
+ *             #blobURL;
+ *             
+ *             constructor (binv, filename, typ) {
+ *                 
+ *                 //FIRST, CREATE INITIAL OBJECT ΤΟ SET BLOB-URL&ANCHOR
+ *                 
+ *                 //create Blob
+ *                 const blobObj = new Blob([binv], {type : typ});
+ *                 //to make URL
+ *                 this.#blobURL = URL.createObjectURL(blobObj);
+ *                 
+ *                 //make a Tag anchor.
+ *                 this.#aTag = document.createElement("a");
+ *                 
+ *                 
+ *                 
+ *                 //SECCOUND, LINK ΙΤ!
+ *                 
+ *                 //link a blob
+ *                 this.#aTag.href = this.#blobURL;
+ *                 //set download filename
+ *                 this.#aTag.download = filename;
+ *                 
+ *                 this.enable();
+ *                 
+ *             }
+ *             
+ *             enable() {
+ *                 document.body.appendChild(this.#aTag);
+ *             }
+ *             
+ *             downloadNow() {
+ *                 this.#aTag.click();
+ *             }
+ * 
+ *             disable() {
+ *                 document.body.removeChild(this.#aTag);
+ *             }
+ *             
+ *             revoke() {
+ *                 this.#aTag.revokeObjectURL();
+ *             }
+ *         
+ *         }
+ *         
+ *         class DidntBlobBeforeDownload extends Error {
+ *             
+ *             constructor (msg) {
+ *                 super(msg);
+ *                 this.name = "DidntBlobBeforeDownload";
+ *             };
+ *             
+ *         };
+ *         
  *         class DownloadibleByte {
  *             
  *             type;
  *             filename;
  *             Uint8ArrayV;
  *             #DownloadibleObjV = null;
+ *             
  * 
- *             Bloping
+ *             bloping() {
+ *                 this.#DownloadibleObjV = new DownloadibleObj(this.Uint8ArrayV, this.filename, this.type);
+ *             }
+ *             
+ *             downloadIt() {
+ *                 const target = this.#DownloadibleObjV
+ *                 if (target == null) {
+ *                     throw new DidntBlobBeforeDownload(`can't downloadIt() [${this.type} file] ${this.filename}`);
+ *                 } else {
+ *                     DownloadNow();
+ *                 }
+ *             }
+ *             
+ *             unbloping() {
+ *                 this.#DownloadibleObjV.revoke();
+ *             }
  *             
  *         }
  *         
@@ -243,9 +316,19 @@ class MainInterface {
  *             @makePageApp(Window.location)
  *             static main(state) {
  *                 
- *                 const bindata = Uint8Array.formBase64(state.hash, options)
- *                 const 
- *             
+ *                 //set downloader as filename:filetype@site#filevalue (tip : this site is an single-page site)
+ *                 const downloader = new DownloadibleByte();
+ *                 const finf = state.usrInf;
+ *                 
+ *                 downloader.filename = finf.id;
+ *                 downloader.typ = finf.pw;
+ *                 downloader.Uint8ArrayV = this.#urlSafeB642Uint8Array(state.hash);
+ *                 
+ *                 //downloading
+ *                 
+ *                 downloader.bloping();
+ *                 downloader.downloadIt();
+ *                 downloader.unbloping();
  *             }
  *             
  *         }
@@ -255,3 +338,9 @@ class MainInterface {
 function pageAppSet(JavaticMainClass, ... parameter) {
     return JavaticMainClass.main(... parameter);
 }
+
+//haha......... tlqkf
+//Window.Window.alert("tabltablet programming it sucks...ahhahaha")
+//燃えたよ、まっ白に、燃えつきた、まっ白な灰に、、、
+
+//haha tlqkf.
