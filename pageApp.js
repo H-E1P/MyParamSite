@@ -9,7 +9,7 @@
  *         2. freezing Object what just 've been generated for.
  * 
  */
-function makeReadOnly(obj) {
+export function makeReadOnly(obj) {
     const ret = new Object.freeze(Object.fromEntries(obj.entries));
     return ret;
 }
@@ -27,7 +27,7 @@ function makeReadOnly(obj) {
  *             > 2. use makeReadOnly() function to make read only
  * 
  */
-function readOnlySearch(location_search) {
+export function readOnlySearch(location_search) {
     const params = new URLSearchParams(location_search);
     return makeReadOnly(params);
 }
@@ -50,7 +50,7 @@ function readOnlySearch(location_search) {
  *              - `[String] pw` : same part, same userinfo's pw part.
  * 
  */
-function getState(Loc) {
+export function getState(Loc) {
     const usrInfo = new {
         id: Loc.username,
         pw: Loc.password
@@ -72,7 +72,7 @@ function getState(Loc) {
  *     it's an read only object.
  * 
  */
-function getConstaticState(Loc) {
+export function getConstaticState(Loc) {
     const state = new getState(Loc);
     const constaticState = new makeReadOnly(state);
     return constaticState;
@@ -133,10 +133,10 @@ function getConstaticState(Loc) {
  *             ```
  * 
  */
-function genDecoratorNamed_makePageApp(stateGetter) {
+export function genDecoratorNamed_makePageApp(stateGetter) {
     function makePageApp(Loc) {
         return function (func) {
-            return func(stateGetter)
+           return func(stateGetter(Loc));
         }
     }
     return new makePageApp;
@@ -145,7 +145,7 @@ function genDecoratorNamed_makePageApp(stateGetter) {
 /**
  * # Java Style Error Class `UnsupportedOperationException`
  */
-class UnsupportedOperationException extends Error {
+export class UnsupportedOperationException extends Error {
     constructor (msg) {
         super(msg);
         this.name = "UnsupportedOperationException";
@@ -155,7 +155,7 @@ class UnsupportedOperationException extends Error {
 /**
  * # Java Style Error Class `AbstractMethodError`
  */
-class AbstractMethodError extends Error {
+export class AbstractMethodError extends Error {
     constructor (msg) {
         super(msg);
         this.name = "AbstractMethodError";
@@ -181,7 +181,7 @@ class AbstractMethodError extends Error {
  *         ```
  * 
  */
-class MainInterface {
+export class MainInterface {
     constructor () {
         if (new.target === MainInterface) {
             throw new UnsupportedOperationException("Cannot instantiate the type MainInteface");
@@ -335,7 +335,7 @@ class MainInterface {
  *         ```
  * 
  */
-function pageAppSet(JavaticMainClass, ... parameter) {
+export function pageAppSet(JavaticMainClass, ... parameter) {
     return JavaticMainClass.main(... parameter);
 }
 
